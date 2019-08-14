@@ -1,0 +1,249 @@
+syntax = "proto3";
+package mahjong.riichi_mahjong;
+import "record.proto";
+
+message Record {
+
+    mahjong.RecordMetadata metadata = 1;
+
+    // 储存立直麻将规则下的特殊对局信息
+    RecordMetadata variation_metadata = 2048;
+
+    repeated Round rounds = 2049;
+}
+
+message RecordMetadata {
+    
+    // 代表对局的起始状态
+    repeated PlayerInitalStatus player_initial_status = 1;
+
+    // 对局的规则设置
+    Rules rules = 2;
+}
+
+message PlayerInitalStatus {
+
+    // 玩家在对局中的ID。
+    // 必须存在与 mahjong.RecordMetadata->players中
+    int32 player_id = 1;
+
+    // 玩家的起始分数。
+    // 比较常见的情况是全体起始分数25000或30000。
+    // 有些情况会有不同，比如《天才麻将少女》中团体赛，四名选手的起始得分不一定一样。
+    int32 score = 2;
+}
+
+message Rules {
+    
+    // 指定有多少张红宝牌
+    enum AkaDora {
+        // 默认：五万，五筒和五锁各一张
+        THREE = 0;
+        // 相比三红宝，多一张红五筒
+        FOUR = 1;
+        // 不使用红宝牌
+        NONE = 2;
+        // 特殊：如果自定义牌组则必须使用该值。
+        CUSTOMIZED = 3;
+    }
+    AkaDora aka_dora = 1;
+
+    bool shyoku_tan = 3;  // 是否允许食断
+    // TODO 多倍役满
+    bool ao_ten_jyou_rule = 6;  // 青天井规则
+    bool ao_ten_jyou_yakuman_13han = 7;  // 青天井规则下，役满视作13翻。
+    bool shi_ba_ri = 8;  // 开启番缚模式
+    int32 shi_ba_ri_han = 9;  // 和牌要求多少番
+    bool double_ron = 10;  // ダブロン
+    bool san_cha_boo = 11;  // 三家和
+    bool ku_i_ka_e = 12;  // 喰い替え
+    
+    
+    Yaku riichi = 1001;  // 立直
+    Yaku i_ppatsu = 1002;  // 一発
+    Yaku men_zen = 1003;  // 門前清自摸和
+    Yaku tan_yao = 1004;  // 断么九
+    Yaku pin_fu = 1005;  // 平和
+    Yaku ii_pei_ko = 1006;  // 一盃口
+    Yaku yaku_hai_haku = 1007;  // 役牌 白
+    Yaku yaku_hai_hatsu = 1008;  // 役牌 發
+    Yaku yaku_hai_tyun = 1007;  // 役牌 中
+    // 自风
+    // 场风
+    Yaku rin_syan = 1010;  // 嶺上開花
+    Yaku tyan_kan = 1011;  // 槍槓
+    Yaku hai_tei = 1012;  // 海底摸月
+    Yaku hou_tei = 1013;  // 河底撈魚
+    Yaku san_syoku_dou_jyun = 1014;  // 三色同順	
+    Yaku i_kitsu = 1015;  // 一気通貫	
+    Yaku chann_ta = 1016;  // 混全帯么九
+    Yaku chii_toi = 1017;  // 七対子
+    Yaku toi_toi = 1018;  // 対々和
+    Yaku sann_an_kou = 1019;  // 三暗刻
+    Yaku honn_rou_tou = 1020;  // 混老頭
+    Yaku san_syoku_dou_kou = 1021;  // 三色同刻
+    Yaku san_kan_tsu = 1022;  // 三槓子
+    Yaku syou_san_gen = 1023;  // 小三元
+    Yaku double_riichi = 1024;  // ダブル立直
+    Yaku hon_ii_sou = 1025;  // 混一色
+    Yaku jyun_tyan = 1026;  // 純全帯么九
+    Yaku ryan_pei_kou = 1027;  // 二盃口
+    Yaku chin_ii_sou = 1028;  // 清一色
+    Yaku koku_si_mu_sou = 1029;  // 国士無双
+    Yaku suu_an_kou = 1031;  // 四暗刻
+    Yaku dai_san_gen = 1033;  // 大三元
+    Yaku tsu_ii_sou = 1034;  // 字一色
+    Yaku shyou_suu_sii = 1035;  // 小四喜
+    Yaku dai_suu_sii = 1036;  // 大四喜
+    Yaku ryuu_ii_sou = 1037;  // 緑一色
+    Yaku chin_rou_tou = 1038;  // 清老頭
+    Yaku suu_kan_tsu = 1039;  // 四槓子
+    Yaku chyu_ren_hou_tou = 1040;  // 九蓮宝燈
+    Yaku ten_hou = 1042;  // 天和
+    Yaku chi_hou = 1043;  // 地和
+    Yaku o_ga_si_man_kan = 1044;  // 流し満貫
+    
+    // TODO: 添加其他古役
+    Yaku open_riichi = 1045;  // オープン立直
+    Yaku ren_hou = 1046;  // 人和
+    Yaku san_ren_kou = 1047;  // 三連刻
+    Yaku suu_ren_kou = 1048;  // 四連刻
+    Yaku i_sshyoku_san_jyun = 1049;  // 一色三順
+    Yaku i_ssyouku_yon_jyun = 1050;  // 一色四順
+    Yaku sii_san_bu_dou = 1051;  // 十三不塔
+    Yaku sii_san_uu_shii = 1052;  // 十三無靠
+    Yaku chii_sin_uu_shii = 1053;  // 七星無靠
+    Yaku tsubame_kae_shi = 1054;  // 燕返し
+    Yaku san_syoku_dou_kan = 1055;  // 三色通貫
+}
+
+// 役种定义
+message Yaku {
+
+    // 是否启用该役种
+    bool enabled = 1;
+
+    // 在番缚开启的状态下是否要求该番
+    bool shi_ba_ri = 2;
+}
+
+message Round {
+	repeated Move moves = 1;
+
+	int32 num_seats = 2;
+	repeated int32 seat_player_ids = 3;
+	
+	int32 oya_seat = 4;
+	int32 quan = 5;  // TODO: Lang
+	int32 hon_ba = 6;  // 本场
+	int32 li_zhi_gong_tuo = 7;  // 立直拱托 TODO: Lang
+}
+
+message Move {
+	oneof detail {
+		ShuffleMove shuffle = 1;
+		RollDiceMove roll_dice = 2;
+		DealMove deal = 3;
+		DiscardMove discard = 4;
+		ChiMove chi = 5;
+		PonMove pon = 6;
+		KanMove kan = 7;
+		RevealDoraIndicatorMove reveal_dora_indicator = 8;
+		NagaReMove naga_re = 9;
+		TsuMoMove tsu_mo = 10;
+		RonMove ron = 11;
+		PayPointsMove pay_points = 12;
+		RiichiMove riichi = 13;
+	}
+}
+
+message ShuffleMove {
+	int32 wall_sequence = 1;
+}
+
+message RollDiceMove {
+	int32 player_roll_id = 1;
+	repeated int32 roll_results = 2;
+}
+
+message DealMove {
+	int32 player_id = 1;
+	repeated int32 dealed_tiles = 2;
+}
+
+message DiscardMove {
+	int32 player_id = 1;
+	int32 discard_tile = 2;
+}
+
+message ChiMove {
+	int32 player_id = 1;
+
+	int32 get_tile = 2;
+	repeated int32 from_hand = 3;
+}
+
+message PonMove {
+	int32 player_id = 1;
+
+	int32 get_tile = 2;
+	repeated int32 from_hand = 3;
+}
+
+message KanMove {
+	int32 player_id = 1;
+	enum KanType {
+		DA_MING_GANG = 0;
+		AN_GANG = 1;
+		JIA_GANG = 2;
+	}
+	KanType kan_type = 2;
+
+	int32 get_tile = 3;
+	repeated int32 from_hand = 4;
+}
+
+message RevealDoraIndicatorMove {
+	int32 tile = 1;
+}
+
+message NagaReMove {
+	enum NagaReType {
+		KOU_PAI_HEI_KYOUKU = 0;
+		KYU_SHU_KYU_HAI = 1;
+		SU_FUN_REN_DAKU = 2;
+		SU_KAI_KAN = 3;
+	}
+	NagaReType type = 1;
+
+	repeated int32 player_reveal_hand = 2;
+}
+
+message TsuMoMove {
+	int32 player_id = 1;
+}
+
+message RonMove {
+	int32 player_id = 1;
+	int32 atari_player = 2;
+}
+
+message PayPointsMove {
+	message PayPoint {
+		int32 player_id = 1;
+		int32 points_change = 2;
+	}
+
+	repeated PayPoint pay_points = 1;
+}
+
+message RiichiMove {
+	enum RiichiMoveType {
+		CALL_RIICHI = 1;
+		RIICHI_SUCCESS = 2;
+	}
+	RiichiMoveType type = 1;
+
+	int32 player_id = 2;
+}
+

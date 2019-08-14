@@ -1,0 +1,27 @@
+syntax = "proto3";
+package mahjong;
+import "common.proto";
+
+message Record {
+
+    // 为各个规则自身预留后面的field
+    reserved 16 to 31, 2048 to max;
+
+    RecordMetadata metadata = 1;
+}
+
+// 包含一局游戏的基本信息，比如参与玩家与游戏规则设定。
+message RecordMetadata {
+
+    // 代表不同的麻将规则和地区玩法。
+    // 不包含同一个地区的细分规则，比如立直麻将中有三张还是四张红宝牌。
+    enum Variation {
+        SIMPLEST_MAHJONG = 0;  // 最简化规则的麻将。
+        COMPETITION_MAHJONG = 1;  // 国标麻将
+        RIICHI_MAHJONG = 2;  // 立直麻将
+    }
+    Variation variation = 1;
+
+    // 记录参与该局游戏的玩家
+    repeated Player players = 2;
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+package mahjong;
+
+// 代表一名玩家
+message Player {
+
+    // 代表玩家在一局游戏/记录中的ID。
+    // 对同一名玩家来说，不同对局中的ID可能不一样。
+    int32 id = 1;
+
+    // 代表玩家在游戏内显示的名称。
+    string name = 2;
+
+    // 提供这名玩家在其他游戏系统上的ID链接。
+    string external_id = 3;
+    string external_game = 4;
+    string external_url = 5;
+}
